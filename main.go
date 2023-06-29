@@ -4,22 +4,28 @@ import (
 	"fmt"
 	"github.com/PuerkitoBio/goquery"
 	"io"
+	"io/ioutil"
 	"log"
 	"net/http"
+	"strings"
 )
 
 func main() {
-	url := "https://bbs.hupu.com/bxj"
-	selector := ".p-title"
+	url := "https://www.you85.net/"
+	selector := "li[style='width: 665px; height: 330px;']"
 
 	results, err := scrapeUrl(url, selector)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	for _, result := range results {
-		fmt.Println(result)
+	content := strings.Join(results, "\n")
+	err = ioutil.WriteFile("output.txt", []byte(content), 0644)
+	if err != nil {
+		log.Fatal(err)
 	}
+
+	log.Println("写入文件成功！")
 }
 
 func scrapeUrl(url string, selector string) ([]string, error) {
